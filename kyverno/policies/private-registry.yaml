@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-public-registries
+
+spec:
+  validationFailureAction:  Enforce
+  rules:
+    - name: deny-public-registries
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message:  "Unknown image registry"
+        pattern:
+          spec:
+            containers:
+              - image:  "kubernetes.io/*"

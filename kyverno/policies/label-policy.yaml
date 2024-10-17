@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-deployment-team-label
+
+spec:
+  validationFailureAction:  Enforce
+  rules:
+    - name: require-deployment-team-label
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+      validate:
+        message:  "you must have a team for all deployments"
+        pattern:
+          metadata:
+            labels:
+              team: "backend"
